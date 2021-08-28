@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        .graph {
+            width: 700px;
+            height: 700px;
+        }
+    </style>
+</head>
+<body>
+    <button onclick="runEpochs(2000)">Run 2000 interations</button>
+    <h2>Current epoch: <span id="epochs">0</span></h2>
+    <div class="graph">
+        <canvas id="myChart" width="700" height="700"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js" integrity="sha256-bC3LCZCwKeehY6T4fFi9VfOU0gztUa+S4cnkIhVPZ5E=" crossorigin="anonymous"></script>
+    <script src="main.js"></script>
+</body>
+</html>
