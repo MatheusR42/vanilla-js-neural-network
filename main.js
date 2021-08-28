@@ -72,6 +72,7 @@ function runEpochs(epochs) {
 
     currentEpoch = currentEpoch + epoch
     document.getElementById('epochs').textContent = currentEpoch
+    document.getElementById('loss').textContent = getLoss()
 
     myChart.data.datasets[1].data = y_pred;
     myChart.update()
@@ -88,14 +89,17 @@ function getPredicts(x) {
 function getGradient1(w, f) {
     return sumArray(x.map((x, i) => {
         return -2 * (y[i] - y_pred[i]) * w * x * Math.pow(Math.E, f(x)) / (1 + Math.pow(Math.E, f(x)))
-    }
-    ))
+    }))
 }
 
 function getGradient2(f) {
     return sumArray(x.map((x, i) =>
         -2 * (y[i] - y_pred[i]) * a(f(x))
     ))
+}
+
+function getLoss() {
+    return sumArray(y.map((y, i) => Math.pow((y - y_pred[i]), 2)))
 }
 
 function getGradientBias1(w, f) {
@@ -111,9 +115,7 @@ function getGradientBias2() {
 }
 
 function getWeight() {
-    const isPositive = Math.random() > 0.5 ? -1 : 1
-
-    return Math.random() * isPositive
+    return Math.random() * isPositive()
 }
 
 function sumArray(arr) {
@@ -129,7 +131,15 @@ function getActivationFuncion(name) {
     return functions[name]
 }
 
+function isPositive() {
+    return  Math.random() > 0.5 ? -1 : 1
+}
+
 function getFakeData() {
+    let a = Math.random() * isPositive()
+    let b = (Math.random() * isPositive())/ 3
+    let c = Math.random() * isPositive()
+
     const range = function (start, stop, step) {
         step = step || 1;
         let arr = [];
@@ -141,12 +151,11 @@ function getFakeData() {
         return arr;
     }
 
-    let i = 0
     const x = range(-1, 1, .01)
 
     return {
         x,
-        y: x.map(x => Math.pow(x, 3))
+        y: x.map(x => a*Math.pow(x, 3) + b*Math.pow(x, 2) + c)
     }
 }
 
