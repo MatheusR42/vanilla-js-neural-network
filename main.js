@@ -50,31 +50,31 @@ function runEpochs(epochs) {
     let epoch = 0
 
     while (epoch < epochs) {
-        let dSSR_w1 = getGradient1(w4, f1)
-        let dSSR_w2 = getGradient1(w5, f2)
-        let dSSR_w3 = getGradient1(w6, f3)
+        const dSSR_w1 = getGradient1(w4, f1)
+        const dSSR_w2 = getGradient1(w5, f2)
+        const dSSR_w3 = getGradient1(w6, f3)
 
-        let dSSR_w4 = getGradient2(f1)
-        let dSSR_w5 = getGradient2(f2)
-        let dSSR_w6 = getGradient2(f3)
+        const dSSR_w4 = getGradient2(f1)
+        const dSSR_w5 = getGradient2(f2)
+        const dSSR_w6 = getGradient2(f3)
 
-        let dSSR_b1 = getGradientBias1(w4, f1)
-        let dSSR_b2 = getGradientBias1(w5, f2)
-        let dSSR_b3 = getGradientBias1(w6, f3)
+        const dSSR_b1 = getGradientBias1(w4, f1)
+        const dSSR_b2 = getGradientBias1(w5, f2)
+        const dSSR_b3 = getGradientBias1(w6, f3)
 
-        let dSSR_b4 = getGradientBias2()
+        const dSSR_b4 = getGradientBias2()
 
-        let step_size_dSSR_w1 = dSSR_w1 * learning_rate
-        let step_size_dSSR_w2 = dSSR_w2 * learning_rate
-        let step_size_dSSR_w3 = dSSR_w3 * learning_rate
-        let step_size_dSSR_w4 = dSSR_w4 * learning_rate
-        let step_size_dSSR_w5 = dSSR_w5 * learning_rate
-        let step_size_dSSR_w6 = dSSR_w6 * learning_rate
+        const step_size_dSSR_w1 = dSSR_w1 * learning_rate
+        const step_size_dSSR_w2 = dSSR_w2 * learning_rate
+        const step_size_dSSR_w3 = dSSR_w3 * learning_rate
+        const step_size_dSSR_w4 = dSSR_w4 * learning_rate
+        const step_size_dSSR_w5 = dSSR_w5 * learning_rate
+        const step_size_dSSR_w6 = dSSR_w6 * learning_rate
 
-        let step_size_dSSR_b1 = dSSR_b1 * learning_rate
-        let step_size_dSSR_b2 = dSSR_b2 * learning_rate
-        let step_size_dSSR_b3 = dSSR_b3 * learning_rate
-        let step_size_dSSR_b4 = dSSR_b4 * learning_rate
+        const step_size_dSSR_b1 = dSSR_b1 * learning_rate
+        const step_size_dSSR_b2 = dSSR_b2 * learning_rate
+        const step_size_dSSR_b3 = dSSR_b3 * learning_rate
+        const step_size_dSSR_b4 = dSSR_b4 * learning_rate
 
 
         w1 = w1 - step_size_dSSR_w1
