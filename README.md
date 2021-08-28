@@ -4,7 +4,7 @@ A simple Neural Network implemented in Javascript without any framework.
 
 URL: https://matheusr42.github.io/vanilla-js-neural-network/
 
-You can read the code comments and the references to understand how it works.
+You can read the comments in the code (main.js) and the references below to understand how it works.
 ## Visualization:
 ![](./prints/02.gif?raw=true)
 
