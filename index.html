@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,23 +8,50 @@
     <title>Document</title>
 
     <style>
+        .flex {
+            display: flex;
+        }
         .graph {
             width: 700px;
             height: 700px;
         }
+
+
+        #cy {
+            width: 700px;
+            height: 700px;
+            position: relative;
+        }
+
+        .cy-container {
+            position: relative;
+            margin-top: 20px;
+        }
     </style>
 </head>
+
 <body>
-    <button onclick="runEpochs(1000)">Run 1000 epochs</button>
-    <h2>Epochs: <span id="epochs">0</span></h2>
-    <h2>Cost/Loss: <span id="loss">-</span></h2>
-    <button onclick="window.location.reload()">Restart</button>
-    <div class="graph">
-        <canvas id="myChart" width="700" height="700"></canvas>
+    <div class="flex">
+
+        <div>
+            <button onclick="runEpochs(1000)">Run 1000 epochs</button>
+            <h2>Epochs: <span id="epochs">0</span></h2>
+            <h2>Cost/Loss: <span id="loss">-</span></h2>
+            <button onclick="window.location.reload()">Restart</button>
+            <div class="graph">
+                <canvas id="myChart" width="700" height="700"></canvas>
+            </div>
+        </div>
+    
+        <div class="cy-container">
+            <div id="cy"></div>
+        </div>
     </div>
 
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js" integrity="sha256-bC3LCZCwKeehY6T4fFi9VfOU0gztUa+S4cnkIhVPZ5E=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"
+        integrity="sha256-bC3LCZCwKeehY6T4fFi9VfOU0gztUa+S4cnkIhVPZ5E=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cytoscape@3.19.1/dist/cytoscape.min.js"></script>
     <script src="main.js"></script>
 </body>
+
 </html>

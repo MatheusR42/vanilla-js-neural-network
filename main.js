@@ -1,6 +1,5 @@
 let currentEpoch = 0
 const learning_rate = .003
-const epochs = 40000
 
 let w1 = getWeight()
 let w2 = getWeight()
@@ -76,6 +75,7 @@ function runEpochs(epochs) {
 
     myChart.data.datasets[1].data = y_pred;
     myChart.update()
+    drawNetworkGrph()
 }
 
 plotGraph()
@@ -132,12 +132,12 @@ function getActivationFuncion(name) {
 }
 
 function isPositive() {
-    return  Math.random() > 0.5 ? -1 : 1
+    return Math.random() > 0.5 ? -1 : 1
 }
 
 function getFakeData() {
     let a = Math.random() * isPositive()
-    let b = (Math.random() * isPositive())/ 3
+    let b = (Math.random() * isPositive()) / 3
     let c = Math.random() * isPositive()
 
     const range = function (start, stop, step) {
@@ -155,7 +155,7 @@ function getFakeData() {
 
     return {
         x,
-        y: x.map(x => a*Math.pow(x, 3) + b*Math.pow(x, 2) + c)
+        y: x.map(x => a * Math.pow(x, 3) + b * Math.pow(x, 2) + c)
     }
 }
 
@@ -166,13 +166,12 @@ function plotGraph() {
             {
                 label: 'Real Data',
                 data: y,
-                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgb(255, 99, 132)',
             },
             {
                 label: 'Predicted',
                 data: y_pred,
-                borderColor: 'rgb(54, 162, 235)',
-                borderDash: [1, 10]
+                backgroundColor: "rgba(0,255,0,.1)",
             },
         ]
     };
@@ -186,4 +185,203 @@ function plotGraph() {
 
         },
     })
+}
+
+drawNetworkGrph()
+
+function normalize_array(arr) {
+
+    normalize = function (val, max, min) {
+        return (val - min) / (max - min);
+    }
+
+    max = Math.max.apply(null, arr)
+    min = Math.min.apply(null, arr)
+
+    hold_normed_values = []
+    arr.forEach(function (this_num) {
+        let val = normalize(this_num, max, min) + .1
+        hold_normed_values.push(val > 1 ? 1 : val)
+    })
+
+    return hold_normed_values
+
+}
+
+function getSum(f) {
+    return sumArray(x.map(x => {
+        return a(f(x))
+    }))
+}
+
+function drawNetworkGrph() {
+    const [a1, a2, a3] = normalize_array([getSum(f1), getSum(f2), getSum(f3)])
+    const ws = normalize_array([w1, w2, w3, w4, w5, w6])
+    const len = y.length
+    const [input, output] = [sumArray(normalize_array((y)))/len, sumArray(normalize_array((y_pred)))/len]
+    const elements = [{
+        "data": {
+            "id": "e121",
+            opacity: ws[0],
+            "weight": 19,
+            "source": "input",
+            "target": "n1"
+        },
+        "position": {},
+        "group": "edges"
+    },
+    {
+        "data": {
+            "id": "e272",
+            opacity: ws[2],
+            "weight": 77,
+            "source": "input",
+            "target": "n3"
+        },
+        "position": {},
+        "group": "edges"
+    },
+    {
+        "data": {
+            "id": "e295",
+            opacity: ws[1],
+            "weight": 98,
+            "source": "input",
+            "target": "n2"
+        },
+        "position": {},
+        "group": "edges"
+    },
+    {
+        "data": {
+            "id": "aaa",
+            opacity: ws[4],
+            "weight": 98,
+            "source": "n2",
+            "target": "output"
+        },
+        "position": {},
+        "group": "edges"
+    },
+    {
+        "data": {
+            "id": "bbb",
+            opacity: ws[3],
+            "weight": 98,
+            "source": "n1",
+            "target": "output"
+        },
+        "position": {},
+        "group": "edges"
+    },
+    {
+        "data": {
+            "id": "c",
+            opacity: ws[4],
+            "weight": 98,
+            "source": "n3",
+            "target": "output"
+        },
+        "position": {},
+        "group": "edges"
+    },
+    {
+        "data": {
+            "id": "input",
+            opacity: input,
+            "weight": 77
+        },
+        "position": {
+            "x": 200,
+            "y": 0
+        },
+        "group": "nodes"
+    },
+    {
+        "data": {
+            "id": "n3",
+            opacity: a3,
+            "weight": 3
+        },
+        "position": {
+            "x": 300,
+            "y": 100
+        },
+        "group": "nodes"
+    },
+    {
+        "data": {
+            "id": "n2",
+            opacity: a2,
+            "weight": 33
+        },
+        "position": {
+            "x": 200,
+            "y": 100
+        },
+        "group": "nodes"
+    },
+    {
+        "data": {
+            "id": "n1",
+            opacity: a1,
+            "weight": 23
+        },
+        "position": {
+            "x": 100,
+            "y": 100
+        },
+        "group": "nodes"
+    },
+    {
+        "data": {
+            "id": "output",
+            opacity: output,
+            "weight": 65
+        },
+        "position": {
+            "x": 200,
+            "y": 200
+        },
+        "group": "nodes"
+    }
+    ]
+
+    if (window.cy && window.cy.json) {
+        window.cy.json({ elements })
+        return
+    }
+
+    window.cy = cytoscape({
+        container: document.getElementById('cy'),
+
+        layout: {
+            name: 'preset'
+        },
+
+        style: [
+            {
+                selector: 'node',
+                style: {
+                    'height': 20,
+                    'width': 20,
+                    "label": "data(id)",
+                    'background-color': '#ff0000',
+                    'opacity': "data(opacity)",
+                }
+            },
+
+            {
+                selector: 'edge',
+                style: {
+                    'curve-style': 'haystack',
+                    'haystack-radius': 0,
+                    'width': 5,
+                    'opacity': "data(opacity)",
+                    'line-color': '#000000'
+                }
+            }
+        ],
+        elements
+    });
 }
