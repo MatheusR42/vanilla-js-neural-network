@@ -1,4 +1,4 @@
-# Vanila JS Neural Network
+# Vanilla JS Neural Network
 
 A simple Neural Network implemented in Javascript without any framework. 
 
