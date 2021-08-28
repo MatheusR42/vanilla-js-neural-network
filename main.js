@@ -29,6 +29,7 @@ function runEpochs(epochs) {
         dSSR_w1 = getGradient1(w4, f1)
         dSSR_w2 = getGradient1(w5, f2)
         dSSR_w3 = getGradient1(w6, f3)
+
         dSSR_w4 = getGradient2(f1)
         dSSR_w5 = getGradient2(f2)
         dSSR_w6 = getGradient2(f3)
@@ -36,6 +37,7 @@ function runEpochs(epochs) {
         dSSR_b1 = getGradientBias1(w4, f1)
         dSSR_b2 = getGradientBias1(w5, f2)
         dSSR_b3 = getGradientBias1(w6, f3)
+
         dSSR_b4 = getGradientBias2()
 
         step_size_dSSR_w1 = dSSR_w1 * learning_rate
@@ -232,7 +234,8 @@ function drawNetworkGrph() {
             opacity: ws[0],
             "weight": 19,
             "source": "input",
-            "target": "n1"
+            "target": "n1",
+            label: "w1 * x + b1"
         },
         "position": {},
         "group": "edges"
@@ -243,7 +246,8 @@ function drawNetworkGrph() {
             opacity: ws[2],
             "weight": 77,
             "source": "input",
-            "target": "n3"
+            "target": "n3",
+            label: "w3 * x + b3"
         },
         "position": {},
         "group": "edges"
@@ -254,7 +258,8 @@ function drawNetworkGrph() {
             opacity: ws[1],
             "weight": 98,
             "source": "input",
-            "target": "n2"
+            "target": "n2",
+            label: "w2 * x + b2"
         },
         "position": {},
         "group": "edges"
@@ -265,6 +270,7 @@ function drawNetworkGrph() {
             opacity: ws[4],
             "weight": 98,
             "source": "n2",
+            label: "w5",
             "target": "output"
         },
         "position": {},
@@ -276,6 +282,7 @@ function drawNetworkGrph() {
             opacity: ws[3],
             "weight": 98,
             "source": "n1",
+            label: "w4",
             "target": "output"
         },
         "position": {},
@@ -287,6 +294,7 @@ function drawNetworkGrph() {
             opacity: ws[4],
             "weight": 98,
             "source": "n3",
+            label: "w6",
             "target": "output"
         },
         "position": {},
@@ -385,9 +393,20 @@ function drawNetworkGrph() {
                     'haystack-radius': 0,
                     'width': 5,
                     'opacity': "data(opacity)",
+                    "font-size": "10px",
                     'line-color': '#000000'
                 }
-            }
+            },
+            {
+                selector: "edge[label]",
+                css: {
+                  "label": "data(label)",
+                  "text-rotation": "autorotate",
+                  color: 'black',
+                  "text-margin-x": "11px",
+                  "text-margin-y": "0px"
+                }
+              },
         ],
         elements
     });
