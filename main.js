@@ -19,10 +19,8 @@ const f2 = x => w2 * x + b2
 const f3 = x => w3 * x + b3
 
 const a = getActivationFuncion('softplus')
-
 const { x, y } = getFakeData()
-
-y_pred = getPredicts(x)
+let y_pred = getPredicts(x)
 
 
 function runEpochs(epochs) {
@@ -35,37 +33,37 @@ function runEpochs(epochs) {
         dSSR_w4 = getGradient2(f1)
         dSSR_w5 = getGradient2(f2)
         dSSR_w6 = getGradient2(f3)
-    
+
         dSSR_b1 = getGradientBias1(w4, f1)
         dSSR_b2 = getGradientBias1(w5, f2)
         dSSR_b3 = getGradientBias1(w6, f3)
         dSSR_b4 = getGradientBias2()
-    
+
         step_size_dSSR_w1 = dSSR_w1 * learning_rate
         step_size_dSSR_w2 = dSSR_w2 * learning_rate
         step_size_dSSR_w3 = dSSR_w3 * learning_rate
         step_size_dSSR_w4 = dSSR_w4 * learning_rate
         step_size_dSSR_w5 = dSSR_w5 * learning_rate
         step_size_dSSR_w6 = dSSR_w6 * learning_rate
-    
+
         step_size_dSSR_b1 = dSSR_b1 * learning_rate
         step_size_dSSR_b2 = dSSR_b2 * learning_rate
         step_size_dSSR_b3 = dSSR_b3 * learning_rate
         step_size_dSSR_b4 = dSSR_b4 * learning_rate
-    
-    
+
+
         w1 = w1 - step_size_dSSR_w1
         w2 = w2 - step_size_dSSR_w2
         w3 = w3 - step_size_dSSR_w3
         w4 = w4 - step_size_dSSR_w4
         w5 = w5 - step_size_dSSR_w5
         w6 = w6 - step_size_dSSR_w6
-    
+
         b1 = b1 - step_size_dSSR_b1
         b2 = b2 - step_size_dSSR_b2
         b3 = b3 - step_size_dSSR_b3
         b4 = b4 - step_size_dSSR_b4
-    
+
         y_pred = x.map(x => {
             return a(f1(x)) * w4 + a(f2(x)) * w5 + a(f3(x)) * w6 + b4
         })
@@ -95,24 +93,24 @@ function getGradient1(w, f) {
 }
 
 function getGradient2(f) {
-    return sumArray(x.map((x, i) => 
+    return sumArray(x.map((x, i) =>
         -2 * (y[i] - y_pred[i]) * a(f(x))
     ))
 }
 
 function getGradientBias1(w, f) {
-    return sumArray(x.map((x, i) => 
+    return sumArray(x.map((x, i) =>
         -2 * (y[i] - y_pred[i]) * w * Math.pow(Math.E, f(x)) / (1 + Math.pow(Math.E, f(x)))
     ))
 }
 
 function getGradientBias2() {
-    return sumArray(x.map((_, i) => 
+    return sumArray(x.map((_, i) =>
         -2 * (y[i] - y_pred[i])
     ))
 }
 
-function getWeight(){
+function getWeight() {
     const isPositive = Math.random() > 0.5 ? -1 : 1
 
     return Math.random() * isPositive
@@ -165,7 +163,7 @@ function plotGraph() {
                 label: 'Predicted',
                 data: y_pred,
                 borderColor: 'rgb(54, 162, 235)',
-                borderDash: [1,10]
+                borderDash: [1, 10]
             },
         ]
     };
@@ -176,7 +174,7 @@ function plotGraph() {
         data: data,
         options: {
             responsive: true,
-            
+
         },
     })
 }
