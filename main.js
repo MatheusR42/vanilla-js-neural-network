@@ -1,56 +1,80 @@
 let currentEpoch = 0
+
+// you can toogle the learning_rate to see the impacts
+// you can learn more about it reading the references at README
 const learning_rate = .003
 
-let w1 = getWeight()
-let w2 = getWeight()
-let w3 = getWeight()
-let w4 = getWeight()
-let w5 = getWeight()
-let w6 = getWeight()
+// initializing the weights
+let w1 = initializeWeight()
+let w2 = initializeWeight()
+let w3 = initializeWeight()
+let w4 = initializeWeight()
+let w5 = initializeWeight()
+let w6 = initializeWeight()
 
+// initializing the bias
 b1 = 0
 b2 = 0
 b3 = 0
 b4 = 0
 
+// linear functions
 const f1 = x => w1 * x + b1
 const f2 = x => w2 * x + b2
 const f3 = x => w3 * x + b3
 
+// activation function. You chan choose in the web
 let a = getActivationFuncion('softplus')
+
+// returns a cubic function with x range from -1 to 1
 const { x, y } = getFakeData()
+
+// run first foward propagation and return the first random prediction
 let y_pred = getPredicts(x)
 
+// just to plot the real data and the prediction
+plotGraph()
 
+// this will plot the network graph (input, output and neurons)
+drawNetworkGrph()
+
+// this is the most important function!
+// It will recive how many epochs will wish to run and for each epoch it will:
+// - Do a backpropagation (Gradient Decentent)
+// - update the weights and bieases
+// - update the predictions points
+// - call the function to update the chart
+// - call the function to update the Network Graph
+// you can learn more about it reading the references at README
 function runEpochs(epochs) {
     let epoch = 0
 
     while (epoch < epochs) {
-        dSSR_w1 = getGradient1(w4, f1)
-        dSSR_w2 = getGradient1(w5, f2)
-        dSSR_w3 = getGradient1(w6, f3)
+        let dSSR_w1 = getGradient1(w4, f1)
+        let dSSR_w2 = getGradient1(w5, f2)
+        let dSSR_w3 = getGradient1(w6, f3)
 
-        dSSR_w4 = getGradient2(f1)
-        dSSR_w5 = getGradient2(f2)
-        dSSR_w6 = getGradient2(f3)
+        let dSSR_w4 = getGradient2(f1)
+        let dSSR_w5 = getGradient2(f2)
+        let dSSR_w6 = getGradient2(f3)
 
-        dSSR_b1 = getGradientBias1(w4, f1)
-        dSSR_b2 = getGradientBias1(w5, f2)
-        dSSR_b3 = getGradientBias1(w6, f3)
+        let dSSR_b1 = getGradientBias1(w4, f1)
+        let dSSR_b2 = getGradientBias1(w5, f2)
+        let dSSR_b3 = getGradientBias1(w6, f3)
 
-        dSSR_b4 = getGradientBias2()
+        let dSSR_b4 = getGradientBias2()
 
-        step_size_dSSR_w1 = dSSR_w1 * learning_rate
-        step_size_dSSR_w2 = dSSR_w2 * learning_rate
-        step_size_dSSR_w3 = dSSR_w3 * learning_rate
-        step_size_dSSR_w4 = dSSR_w4 * learning_rate
-        step_size_dSSR_w5 = dSSR_w5 * learning_rate
-        step_size_dSSR_w6 = dSSR_w6 * learning_rate
+        let step_size_dSSR_w1 = dSSR_w1 * learning_rate
+        let step_size_dSSR_w2 = dSSR_w2 * learning_rate
+        let step_size_dSSR_w3 = dSSR_w3 * learning_rate
+        let step_size_dSSR_w4 = dSSR_w4 * learning_rate
+        let step_size_dSSR_w5 = dSSR_w5 * learning_rate
+        let step_size_dSSR_w6 = dSSR_w6 * learning_rate
 
-        step_size_dSSR_b1 = dSSR_b1 * learning_rate
-        step_size_dSSR_b2 = dSSR_b2 * learning_rate
-        step_size_dSSR_b3 = dSSR_b3 * learning_rate
-        step_size_dSSR_b4 = dSSR_b4 * learning_rate
+        let step_size_dSSR_b1 = dSSR_b1 * learning_rate
+        let step_size_dSSR_b2 = dSSR_b2 * learning_rate
+        let step_size_dSSR_b3 = dSSR_b3 * learning_rate
+        let step_size_dSSR_b4 = dSSR_b4 * learning_rate
 
 
         w1 = w1 - step_size_dSSR_w1
@@ -65,9 +89,7 @@ function runEpochs(epochs) {
         b3 = b3 - step_size_dSSR_b3
         b4 = b4 - step_size_dSSR_b4
 
-        y_pred = x.map(x => {
-            return a(f1(x)) * w4 + a(f2(x)) * w5 + a(f3(x)) * w6 + b4
-        })
+        y_pred = getPredicts(x)
         epoch++
     }
 
@@ -75,17 +97,35 @@ function runEpochs(epochs) {
     document.getElementById('epochs').textContent = currentEpoch
     document.getElementById('loss').textContent = getLoss()
 
-    myChart.data.datasets[1].data = y_pred;
+    myChart.data.datasets[1].data = y_pred
     myChart.update()
     drawNetworkGrph()
 }
 
-plotGraph()
-
+// this function recieves the original x values and return the predicted y values
 function getPredicts(x) {
     return x.map(x => {
         return a(f1(x)) * w4 + a(f2(x)) * w5 + a(f3(x)) * w6 + b4
     })
+}
+
+// this functions will verify how good our network is using residual sum of squares
+// it's not the best aproach because it can leave to local minima, but it's easier to explain
+function getLoss() {
+    return sumArray(y.map((y, i) => Math.pow((y - y_pred[i]), 2)))
+}
+
+// this will generate a random value rangin from -1 to 1
+function initializeWeight() {
+    return Math.random() * isPositive()
+}
+
+// function to change the activation function using the select from ui
+// this do not change the gradients, but it's fun to test. 
+// ReLu shows great results in many cases
+function setActivationFunction() {
+    var val = document.getElementById("select").value
+    a = getActivationFuncion(val)
 }
 
 function getGradient1(w, f) {
@@ -100,10 +140,6 @@ function getGradient2(f) {
     ))
 }
 
-function getLoss() {
-    return sumArray(y.map((y, i) => Math.pow((y - y_pred[i]), 2)))
-}
-
 function getGradientBias1(w, f) {
     return sumArray(x.map((x, i) =>
         -2 * (y[i] - y_pred[i]) * w * Math.pow(Math.E, f(x)) / (1 + Math.pow(Math.E, f(x)))
@@ -116,22 +152,15 @@ function getGradientBias2() {
     ))
 }
 
-function getWeight() {
-    return Math.random() * isPositive()
-}
-
 function sumArray(arr) {
     return arr.reduce((a, b) => a + b, 0)
 }
 
-function setActivationFunction() {
-    var val = document.getElementById("select").value;
-    a = getActivationFuncion(val)
-}
 
+// more about activation functions can be found in README.md
 function getActivationFuncion(name) {
     const functions = {
-        'sigmoid': x =>  1/(1+Math.pow(Math.E, -x)),
+        'sigmoid': x => 1 / (1 + Math.pow(Math.E, -x)),
         'relu': x => x < 0 ? 0 : x,
         'softplus': x => Math.log(1 + Math.pow(Math.E, x)),
         'tanh': x => Math.tanh(x)
@@ -150,14 +179,14 @@ function getFakeData() {
     let c = Math.random() * isPositive()
 
     const range = function (start, stop, step) {
-        step = step || 1;
-        let arr = [];
+        step = step || 1
+        let arr = []
 
         for (let i = start; i < stop; i += step) {
-            arr.push(i);
+            arr.push(i)
         }
 
-        return arr;
+        return arr
     }
 
     const x = range(-1, 1, .01)
@@ -183,38 +212,34 @@ function plotGraph() {
                 backgroundColor: "rgba(0,255,0,.1)",
             },
         ]
-    };
+    }
 
-    let ctx = document.getElementById('myChart').getContext('2d');
+    let ctx = document.getElementById('myChart').getContext('2d')
     myChart = new Chart(ctx, {
         type: 'line',
         data: data,
         options: {
             responsive: true,
-
         },
     })
 }
 
-drawNetworkGrph()
+// the next functions are used just to prety print the Network Graph
+function normalize(val, max, min) {
+    return (val - min) / (max - min)
+}
 
 function normalize_array(arr) {
+    const hold_normed_values = []
+    const max = Math.max.apply(null, arr)
+    const min = Math.min.apply(null, arr)
 
-    normalize = function (val, max, min) {
-        return (val - min) / (max - min);
-    }
-
-    max = Math.max.apply(null, arr)
-    min = Math.min.apply(null, arr)
-
-    hold_normed_values = []
-    arr.forEach(function (this_num) {
-        let val = normalize(this_num, max, min) + .1
+    arr.forEach((this_num) => {
+        const val = normalize(this_num, max, min) + .1
         hold_normed_values.push(val > 1 ? 1 : val)
     })
 
     return hold_normed_values
-
 }
 
 function getSum(f) {
@@ -227,7 +252,7 @@ function drawNetworkGrph() {
     const [a1, a2, a3] = normalize_array([getSum(f1), getSum(f2), getSum(f3)])
     const ws = normalize_array([w1, w2, w3, w4, w5, w6])
     const len = y.length
-    const [input, output] = [sumArray(normalize_array((y)))/len, sumArray(normalize_array((y_pred)))/len]
+    const [input, output] = [sumArray(normalize_array((y))) / len, sumArray(normalize_array((y_pred))) / len]
     const elements = [{
         "data": {
             "id": "e121",
@@ -369,11 +394,9 @@ function drawNetworkGrph() {
 
     window.cy = cytoscape({
         container: document.getElementById('cy'),
-
         layout: {
             name: 'preset'
         },
-
         style: [
             {
                 selector: 'node',
@@ -385,7 +408,6 @@ function drawNetworkGrph() {
                     'opacity': "data(opacity)",
                 }
             },
-
             {
                 selector: 'edge',
                 style: {
@@ -400,14 +422,14 @@ function drawNetworkGrph() {
             {
                 selector: "edge[label]",
                 css: {
-                  "label": "data(label)",
-                  "text-rotation": "autorotate",
-                  color: 'black',
-                  "text-margin-x": "11px",
-                  "text-margin-y": "0px"
+                    "label": "data(label)",
+                    "text-rotation": "autorotate",
+                    color: 'black',
+                    "text-margin-x": "11px",
+                    "text-margin-y": "0px"
                 }
-              },
+            },
         ],
         elements
-    });
+    })
 }
