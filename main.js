@@ -220,6 +220,11 @@ function plotGraph() {
         data: data,
         options: {
             responsive: true,
+            scales: {
+                x: {
+                    type: 'linear'
+                },
+            }
         },
     })
 }
