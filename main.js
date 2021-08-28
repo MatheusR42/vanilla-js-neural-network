@@ -124,6 +124,7 @@ function sumArray(arr) {
 
 function getActivationFuncion(name) {
     const functions = {
+        'sigmoid': x =>  1/(1+Math.pow(Math.E, -x)),
         'relu': x => x < 0 ? 0 : x,
         'softplus': x => Math.log(1 + Math.pow(Math.E, x))
     }
