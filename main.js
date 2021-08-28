@@ -17,7 +17,7 @@ const f1 = x => w1 * x + b1
 const f2 = x => w2 * x + b2
 const f3 = x => w3 * x + b3
 
-const a = getActivationFuncion('softplus')
+let a = getActivationFuncion('softplus')
 const { x, y } = getFakeData()
 let y_pred = getPredicts(x)
 
@@ -122,11 +122,17 @@ function sumArray(arr) {
     return arr.reduce((a, b) => a + b, 0)
 }
 
+function setActivationFunction() {
+    var val = document.getElementById("select").value;
+    a = getActivationFuncion(val)
+}
+
 function getActivationFuncion(name) {
     const functions = {
         'sigmoid': x =>  1/(1+Math.pow(Math.E, -x)),
         'relu': x => x < 0 ? 0 : x,
-        'softplus': x => Math.log(1 + Math.pow(Math.E, x))
+        'softplus': x => Math.log(1 + Math.pow(Math.E, x)),
+        'tanh': x => Math.tanh(x)
     }
 
     return functions[name]

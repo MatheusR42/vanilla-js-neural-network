@@ -38,6 +38,12 @@
             <h2>Epochs: <span id="epochs">0</span></h2>
             <h2>Cost/Loss: <span id="loss">-</span></h2>
             <button onclick="window.location.reload()">Restart</button>
+            <select id="select" onchange="setActivationFunction()">
+                <option value="softplus" selected>Softplus</option>
+                <option value="relu">ReLu</option>
+                <option value="sigmoid">Sigmoid</option>
+                <option value="tanh">Tanh</option>
+            </select>
             <div class="graph">
                 <canvas id="myChart" width="700" height="700"></canvas>
             </div>
