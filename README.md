@@ -21,3 +21,6 @@ https://towardsdatascience.com/activation-functions-neural-networks-1cbd9f8d91d6
 
 - Learning Rate:
 https://towardsdatascience.com/understanding-learning-rates-and-how-it-improves-performance-in-deep-learning-d0d4059c1c10
+
+- Epoch vs Batch Size vs Iterations:
+https://towardsdatascience.com/epoch-vs-iterations-vs-batch-size-4dfb9c7ce9c9
