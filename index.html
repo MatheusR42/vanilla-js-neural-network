@@ -11,27 +11,51 @@
         .flex {
             display: flex;
         }
-        .graph {
-            width: 700px;
-            height: 700px;
+
+        #cy, #myChart {
+            width: 500px;
+            height: 500px;
+            margin: 0 auto;
+            position: relative;
         }
 
-        #cy {
-            width: 700px;
-            height: 700px;
-            position: relative;
+        .chart-container {
+            margin-bottom: 20px;
         }
 
         .cy-container {
             position: relative;
-            margin-top: 20px;
+        }
+
+        .container {
+            position: relative;
+            width: 1024px;
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        .source {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 1023px) {
+            .flex {
+                flex-direction: column;
+            }
+
+            #cy, #myChart {
+                width: calc(90vw);
+                height: calc(90vw);
+                margin: 0 auto;
+                position: relative;
+            }
         }
     </style>
 </head>
 
 <body>
-    <div class="flex">
-
+    <div class="container">
         <div>
             <button onclick="runEpochs(1000)">Run 1000 epochs</button>
             <h2>Epochs: <span id="epochs">0</span></h2>
@@ -43,14 +67,23 @@
                 <option value="sigmoid">Sigmoid</option>
                 <option value="tanh">Tanh</option>
             </select>
-            <div class="graph">
-                <canvas id="myChart" width="700" height="700"></canvas>
+        </div>
+        <div class="flex">
+            <div class="chart-container">
+                <h2>Neural Network Outputs</h2>
+                <div class="graph">
+                    <canvas id="myChart" width="350" height="350"></canvas>
+                </div>
+            </div>
+            
+            <div class="cy-container">
+                <h2>Neural Network Graph</h2>
+                <div id="cy"></div>
             </div>
         </div>
-    
-        <div class="cy-container">
-            <div id="cy"></div>
-        </div>
+        <p class="source">
+            <a href="https://github.com/matheusR42/vanilla-js-neural-network" target="_blank">Source Code and References</a>
+        </p>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.5.1/dist/chart.min.js"

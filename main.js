@@ -32,12 +32,6 @@ const { x, y } = getFakeData()
 // run first foward propagation and return the first random prediction
 let y_pred = getPredicts(x)
 
-// just to plot the real data and the prediction
-plotGraph()
-
-// this will plot the network graph (input, output and neurons)
-drawNetworkGrph()
-
 // this is the most important function!
 // It will recive how many epochs will wish to run and for each epoch it will:
 // - Do a backpropagation (Gradient Decentent)
@@ -102,6 +96,16 @@ function runEpochs(epochs) {
     drawNetworkGrph()
 }
 
+// just to initialize the view
+document.addEventListener("DOMContentLoaded", () => {
+    // just to plot the real data and the prediction
+    plotGraph()
+
+    // this will plot the network graph (input, output and neurons)
+    drawNetworkGrph()
+    document.getElementById('loss').textContent = getLoss()
+});
+
 // this function recieves the original x values and return the predicted y values
 function getPredicts(x) {
     return x.map(x => {
@@ -156,7 +160,6 @@ function sumArray(arr) {
     return arr.reduce((a, b) => a + b, 0)
 }
 
-
 // more about activation functions can be found in README.md
 function getActivationFuncion(name) {
     const functions = {
@@ -174,7 +177,7 @@ function isPositive() {
 }
 
 function getFakeData() {
-    let a = Math.random() * isPositive()
+    let a = Math.random() * isPositive() * 1.1
     let b = (Math.random() * isPositive()) / 3
     let c = Math.random() * isPositive()
 
@@ -255,16 +258,17 @@ function getSum(f) {
 
 function drawNetworkGrph() {
     const [a1, a2, a3] = normalize_array([getSum(f1), getSum(f2), getSum(f3)])
-    const ws = normalize_array([w1, w2, w3, w4, w5, w6])
+    const ws1 = normalize_array([w1 + b1, w2 + b2, w3 + b3])
+    const ws2 = normalize_array([w4, w5, w6])
     const len = y.length
     const [input, output] = [sumArray(normalize_array((y))) / len, sumArray(normalize_array((y_pred))) / len]
     const elements = [{
         "data": {
             "id": "e121",
-            opacity: ws[0],
+            opacity: ws1[0],
             "weight": 19,
             "source": "input",
-            "target": "n1",
+            "target": "a(z1)",
             label: "w1 * x + b1"
         },
         "position": {},
@@ -273,10 +277,10 @@ function drawNetworkGrph() {
     {
         "data": {
             "id": "e272",
-            opacity: ws[2],
+            opacity: ws1[2],
             "weight": 77,
             "source": "input",
-            "target": "n3",
+            "target": "a(z3)",
             label: "w3 * x + b3"
         },
         "position": {},
@@ -285,10 +289,10 @@ function drawNetworkGrph() {
     {
         "data": {
             "id": "e295",
-            opacity: ws[1],
+            opacity: ws1[1],
             "weight": 98,
             "source": "input",
-            "target": "n2",
+            "target": "a(z2)",
             label: "w2 * x + b2"
         },
         "position": {},
@@ -297,9 +301,9 @@ function drawNetworkGrph() {
     {
         "data": {
             "id": "aaa",
-            opacity: ws[4],
+            opacity: ws2[1],
             "weight": 98,
-            "source": "n2",
+            "source": "a(z2)",
             label: "w5",
             "target": "output"
         },
@@ -309,9 +313,9 @@ function drawNetworkGrph() {
     {
         "data": {
             "id": "bbb",
-            opacity: ws[3],
+            opacity: ws2[0],
             "weight": 98,
-            "source": "n1",
+            "source": "a(z1)",
             label: "w4",
             "target": "output"
         },
@@ -321,9 +325,9 @@ function drawNetworkGrph() {
     {
         "data": {
             "id": "c",
-            opacity: ws[4],
+            opacity: ws2[2],
             "weight": 98,
-            "source": "n3",
+            "source": "a(z3)",
             label: "w6",
             "target": "output"
         },
@@ -337,43 +341,43 @@ function drawNetworkGrph() {
             "weight": 77
         },
         "position": {
-            "x": 200,
+            "x": 150,
             "y": 0
         },
         "group": "nodes"
     },
     {
         "data": {
-            "id": "n3",
+            "id": "a(z3)",
             opacity: a3,
             "weight": 3
         },
         "position": {
-            "x": 300,
+            "x": 250,
             "y": 100
         },
         "group": "nodes"
     },
     {
         "data": {
-            "id": "n2",
+            "id": "a(z2)",
             opacity: a2,
             "weight": 33
         },
         "position": {
-            "x": 200,
+            "x": 150,
             "y": 100
         },
         "group": "nodes"
     },
     {
         "data": {
-            "id": "n1",
+            "id": "a(z1)",
             opacity: a1,
             "weight": 23
         },
         "position": {
-            "x": 100,
+            "x": 50,
             "y": 100
         },
         "group": "nodes"
@@ -385,7 +389,7 @@ function drawNetworkGrph() {
             "weight": 65
         },
         "position": {
-            "x": 200,
+            "x": 150,
             "y": 200
         },
         "group": "nodes"
@@ -398,19 +402,25 @@ function drawNetworkGrph() {
     }
 
     window.cy = cytoscape({
+        userZoomingEnabled: false,
+        userPanningEnabled: false,
+        boxSelectionEnabled: false,
         container: document.getElementById('cy'),
         layout: {
-            name: 'preset'
+            name: 'preset',
+            fit: true
         },
         style: [
             {
                 selector: 'node',
                 style: {
-                    'height': 20,
-                    'width': 20,
+                    'height': 12,
+                    'width': 12,
                     "label": "data(id)",
                     'background-color': '#ff0000',
                     'opacity': "data(opacity)",
+                    'text-valign':'center',
+                    'text-halign':'left', 
                 }
             },
             {
@@ -418,7 +428,7 @@ function drawNetworkGrph() {
                 style: {
                     'curve-style': 'haystack',
                     'haystack-radius': 0,
-                    'width': 5,
+                    'width': 3,
                     'opacity': "data(opacity)",
                     "font-size": "10px",
                     'line-color': '#000000'
