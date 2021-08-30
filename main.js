@@ -33,7 +33,7 @@ const { x, y } = getFakeData()
 let y_pred = getPredicts(x)
 
 // this is the most important function!
-// It will recive how many epochs will wish to run and for each epoch it will:
+// It will recive how many epochs you wish to run and for each epoch it will:
 // - Do a backpropagation (Gradient Decentent)
 // - update the weights and bieases
 // - update the predictions points
@@ -119,7 +119,7 @@ function getLoss() {
     return sumArray(y.map((y, i) => Math.pow((y - y_pred[i]), 2)))
 }
 
-// this will generate a random value rangin from -1 to 1
+// this will generate a random value ranging from -1 to 1
 function initializeWeight() {
     return Math.random() * isPositive()
 }
